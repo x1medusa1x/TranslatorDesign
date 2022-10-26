@@ -1,0 +1,85 @@
+/*
+   Simple +/-/* expression language; 
+   parser evaluates constant expressions on the fly
+*/
+
+package cup;
+
+import java_cup.runtime.*;
+import cup.Lexer;
+import java.io.IOException;
+import java.io.File;
+import java.io.FileInputStream;
+
+parser code {:
+  protected Lexer lexer;
+:}
+
+/* define how to connect to the scanner! */
+init with {:
+  ComplexSymbolFactory f = new ComplexSymbolFactory();
+  symbolFactory = f;
+  File file = new File("input.txt");
+  FileInputStream fis = null;
+  try {
+    fis = new FileInputStream(file);
+  } catch (IOException e) {
+    e.printStackTrace();
+  } 
+  lexer = new Lexer(f,fis);
+:};
+scan with {: return lexer.next_token(); :};
+
+/* Terminals (tokens returned by the scanner). */
+terminal            SEMI, PLUS, MINUS, UMINUS,
+					TIMES, LPAREN, RPAREN, CLASS,
+					PUBLIC, PRIVATE, INT,
+					FLOAT, DOUBLE, STR,
+					PROTECTED, CLPAREN, CRPAREN,
+					ST, CR, COMMA;
+terminal Integer    NUMBER;        // our scanner provides numbers as integers
+terminal String     STRING;
+
+/* Non terminals */
+non terminal            expr_list;
+non terminal Integer    expr;      // used to store evaluated subexpressions
+non terminal String     exprStr; 
+
+/* Precedences */
+precedence left PLUS, MINUS;
+precedence left TIMES;
+precedence left UMINUS;
+
+/* The grammar rules */
+expr_list ::= expr_list expr:e SEMI         {: System.out.println(e); :}
+            | expr:e SEMI                   {: System.out.println(e); :}
+            | exprStr: e                    {: System.out.println(e); :}
+            | expr_list exprStr:e           {: System.out.println(e); :}
+            | expr_list:e SEMI              {: System.out.println(e); :}
+            | expr_list:e COMMA               {: System.out.println(e); :}
+            ;
+            
+expr      ::= expr:e1 PLUS  expr:e2         {: RESULT = e1+e2;        :}
+             | expr:e1 MINUS expr:e2        {: RESULT = e1-e2;        :}
+             | expr:e1 TIMES expr:e2        {: RESULT = e1*e2;        :}
+             | MINUS expr:e                 {: RESULT = -e;           :}
+             %prec UMINUS
+             | LPAREN expr:e RPAREN	        {: RESULT = e;           :}
+             | NUMBER:n	                    {: RESULT = n;           :}
+             ;
+exprStr ::=  CLASS STRING:e                 {: RESULT = e; :}
+			| STRING:e                      {: RESULT = "ceva_" + e; :}
+			| CLASS STRING:str CLPAREN expr_list:e CRPAREN    {: RESULT = "" + e + ""; :}
+		   	| PUBLIC INT STRING:e2 SEMI     {: RESULT = "public variable " + e2 + " of type int"; :}
+		   	| PUBLIC INT expr_list:e2       {: RESULT = "public variables " + e2 + " of type int"; :}
+		   	| PUBLIC CR STRING:e2 SEMI      {: RESULT = "public variable " + e2 + " of type char"; :}
+		   	| PUBLIC STR STRING:e2 SEMI     {: RESULT = "public variable " + e2 + " of type string"; :}
+		   	| PUBLIC FLOAT STRING:e2 SEMI   {: RESULT = "public variable " + e2 + " of type float"; :}
+		   	| PUBLIC DOUBLE STRING:e2 SEMI  {: RESULT = "public variable " + e2 + " of type double"; :}
+		   	| INT STRING:e SEMI             {: RESULT = "non-static int variable " + e; :}
+			| CR STRING:e SEMI              {: RESULT = "non-static char variable " + e; :}
+			| STR STRING:e SEMI             {: RESULT = "non-static string variable " + e; :}
+			| DOUBLE STRING:e SEMI          {: RESULT = "non-static double variable " + e; :}
+			| FLOAT STRING:e SEMI           {: RESULT = "non-static float variable " + e; :}
+			;
+			

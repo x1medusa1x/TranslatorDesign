@@ -1,0 +1,8 @@
+class abc
+{
+	public: 
+		int a;
+		int b;
+		char d;
+		float ab;
+}

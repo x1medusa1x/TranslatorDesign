@@ -1,8 +1,10 @@
 class abc
 {
 	public: 
-		int a;
+		int a = "aaaaaa";
 		int b;
 		char d;
 		float ab;
+		
+	private: aaaa
 }

@@ -31,15 +31,15 @@ init with {:
 scan with {: return lexer.next_token(); :};
 
 /* Terminals (tokens returned by the scanner). */
-terminal            SEMI, PLUS, MINUS, UMINUS,
+terminal            SEMI, PLUS, MINUS, UMINUS, CHAR,
 					TIMES, LPAREN, RPAREN, CLASS,
-					PUBLIC, PRIVATE, INT, COLON, 
+					PUBLIC, PRIVATE, INT, COLON, EQUAL,
 					FLOAT, DOUBLE, STR, PROTECTED, CLPAREN, CRPAREN,
-					ST, CR, COMMA, NAMESPACE, DEFINE, INCLUDE, ASM, AUTO, 
+					STATIC, COMMA, NAMESPACE, DEFINE, INCLUDE, ASM, AUTO, 
 					BREAK, CASE, CATCH, CONST, CONTINUE, DEFAULT, 
 					DELETE, DO, ELSE, ENUM, EXTERN, FOR, FRIEND, 
 					GOTO, IF, INLINE, LONG, NEW, OPERATOR, REGISTER, 
-					RETURN, SHORT, SIGNED, SIZEOF, STATIC, STRUCT, 
+					RETURN, SHORT, SIGNED, SIZEOF, STRUCT, 
 					SWITCH, TEMPLATE, THIS, THROW, TRY, TYPEDEF, UNION, 
 					UNSIGNED, VIRTUAL, VOID, VOLATILE, WHILE, LEFTSHIFT, 
 					RIGHTSHIFT, XOR, AND, OR, SMALLERTHAN, GREATERTHAN, IDENT;
@@ -78,14 +78,15 @@ exprString ::=   CLASS IDENT:e             {: RESULT = e; :}
 			| IDENT:e                      {: RESULT = "ceva_" + e; :}
 			| CLASS IDENT:str CLPAREN expr_list:e CRPAREN    {: RESULT = "" + e + " in class " + str ; :}
 		   	| PUBLIC INT IDENT:e2 SEMI     {: RESULT = "public variable " + e2 + " of type int"; :}
-		   	| PUBLIC CR IDENT:e2 SEMI      {: RESULT = "public variable " + e2 + " of type char"; :}
+		   	| PUBLIC CHAR IDENT:e2 SEMI      {: RESULT = "public variable " + e2 + " of type char"; :}
 		   	| PUBLIC STR IDENT:e2 SEMI     {: RESULT = "public variable " + e2 + " of type string"; :}
 		   	| PUBLIC FLOAT IDENT:e2 SEMI   {: RESULT = "public variable " + e2 + " of type float"; :}
 		   	| PUBLIC DOUBLE IDENT:e2 SEMI  {: RESULT = "public variable " + e2 + " of type double"; :}
 		   	| INT IDENT:e SEMI             {: RESULT = "non-static int variable " + e; :}
-			| CR IDENT:e SEMI              {: RESULT = "non-static char variable " + e; :}
+			| CHAR IDENT:e SEMI              {: RESULT = "non-static char variable " + e; :}
 			| STR IDENT:e SEMI             {: RESULT = "non-static string variable " + e; :}
 			| DOUBLE IDENT:e SEMI          {: RESULT = "non-static double variable " + e; :}
 			| FLOAT IDENT:e SEMI           {: RESULT = "non-static float variable " + e; :}
 			| LONG IDENT:e SEMI            {: RESULT = "non-static long variable " + e; :} 
 			;
+			

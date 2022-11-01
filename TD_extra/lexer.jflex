@@ -57,7 +57,7 @@ import java.io.InputStreamReader;
 Newline    = \r | \n | \r\n
 Whitespace = [ \t\f] | {Newline}
 Number     = [0-9]+
-String     = '"' [A-Za-z]* '"'
+String     = \".*\"
 
 Zero = 0
 DecInt = [1-9][0-9]*
@@ -90,10 +90,10 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "float"     { return symbolFactory.newSymbol("FLOAT", FLOAT); }
   "double"    { return symbolFactory.newSymbol("DOUBLE", DOUBLE); }
   "string"    { return symbolFactory.newSymbol("STR", STR); }
-  "char"      { return symbolFactory.newSymbol("CR", CR); }
+  "char"      { return symbolFactory.newSymbol("CHAR", CHAR); }
   "private"   { return symbolFactory.newSymbol("PRIVATE", PRIVATE); }
   "protected" { return symbolFactory.newSymbol("PROTECTED", PROTECTED); }
-  "static"    { return symbolFactory.newSymbol("ST", ST); }
+  "static"    { return symbolFactory.newSymbol("STATIC", STATIC); }
   "namespace" { return symbolFactory.newSymbol("NAMESPACE", NAMESPACE); }
   "define"     { return symbolFactory.newSymbol("DEFINE", DEFINE); } 
   "include"    { return symbolFactory.newSymbol("INCLUDE", INCLUDE); }
@@ -139,7 +139,7 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   
    /* MISC */
   {Number}     { return symbolFactory.newSymbol("NUMBER", NUMBER, Integer.parseInt(yytext())); }
-  {String}     { return symbolFactory.newSymbol("STRING", STRING, yytext()); }
+  {String}     { return symbolFactory.newSymbol("STRING", STRING); }
   {Whitespace} {                              }
   {ident}      { return symbolFactory.newSymbol("IDENT", IDENT); }
   
@@ -162,6 +162,7 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "|"          { return symbolFactory.newSymbol("OR", OR); }
   "<"          { return symbolFactory.newSymbol("SMALLERTHAN", SMALLERTHAN); }
   ">"          { return symbolFactory.newSymbol("GREATERTHAN", GREATERTHAN); }
+  "="          { return symbolFactory.newSymbol("EQUAL", EQUAL); }
 }
 
 

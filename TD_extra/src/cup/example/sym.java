@@ -8,81 +8,81 @@ package cup.example;
 /** CUP generated interface containing symbol constants. */
 public interface sym {
   /* terminals */
-  public static final int SHORT = 49;
-  public static final int SIGNED = 50;
-  public static final int TIMES = 6;
-  public static final int CONST = 31;
-  public static final int ASM = 26;
-  public static final int ST = 20;
+  public static final int SHORT = 50;
+  public static final int SIGNED = 51;
+  public static final int TIMES = 7;
+  public static final int CONST = 32;
+  public static final int ASM = 27;
   public static final int SEMI = 2;
   public static final int RIGHTSHIFT = 67;
-  public static final int REGISTER = 47;
-  public static final int NAMESPACE = 23;
-  public static final int ENUM = 37;
-  public static final int SIZEOF = 51;
-  public static final int CATCH = 30;
-  public static final int COMMA = 22;
+  public static final int REGISTER = 48;
+  public static final int NAMESPACE = 24;
+  public static final int ENUM = 38;
+  public static final int SIZEOF = 52;
+  public static final int CATCH = 31;
+  public static final int COMMA = 23;
   public static final int VIRTUAL = 62;
-  public static final int DEFINE = 24;
+  public static final int DEFINE = 25;
   public static final int THROW = 57;
-  public static final int RPAREN = 8;
+  public static final int RPAREN = 9;
   public static final int SMALLERTHAN = 71;
-  public static final int DOUBLE = 15;
+  public static final int DOUBLE = 17;
   public static final int STRUCT = 53;
-  public static final int LPAREN = 7;
-  public static final int FRIEND = 40;
-  public static final int PROTECTED = 17;
-  public static final int INLINE = 43;
-  public static final int FLOAT = 14;
-  public static final int CRPAREN = 19;
-  public static final int GOTO = 41;
-  public static final int STR = 16;
+  public static final int LPAREN = 8;
+  public static final int FRIEND = 41;
+  public static final int PROTECTED = 19;
+  public static final int INLINE = 44;
+  public static final int FLOAT = 16;
+  public static final int CRPAREN = 21;
+  public static final int GOTO = 42;
+  public static final int STR = 18;
   public static final int GREATERTHAN = 72;
-  public static final int CLPAREN = 18;
-  public static final int CLASS = 9;
-  public static final int INCLUDE = 25;
+  public static final int CLPAREN = 20;
+  public static final int CLASS = 10;
+  public static final int INCLUDE = 26;
   public static final int NUMBER = 74;
-  public static final int LONG = 44;
+  public static final int LONG = 45;
   public static final int PLUS = 3;
   public static final int WHILE = 65;
   public static final int UNION = 60;
-  public static final int DELETE = 34;
+  public static final int EQUAL = 15;
+  public static final int DELETE = 35;
+  public static final int CHAR = 6;
   public static final int SWITCH = 54;
-  public static final int DO = 35;
+  public static final int DO = 36;
   public static final int LEFTSHIFT = 66;
-  public static final int FOR = 39;
+  public static final int FOR = 40;
   public static final int VOID = 63;
-  public static final int EXTERN = 38;
-  public static final int PUBLIC = 10;
-  public static final int RETURN = 48;
-  public static final int ELSE = 36;
+  public static final int EXTERN = 39;
+  public static final int PUBLIC = 11;
+  public static final int RETURN = 49;
+  public static final int ELSE = 37;
   public static final int TRY = 58;
-  public static final int BREAK = 28;
-  public static final int INT = 12;
+  public static final int BREAK = 29;
+  public static final int INT = 13;
   public static final int EOF = 0;
   public static final int THIS = 56;
-  public static final int DEFAULT = 33;
-  public static final int OPERATOR = 46;
-  public static final int CR = 21;
+  public static final int DEFAULT = 34;
+  public static final int OPERATOR = 47;
   public static final int MINUS = 4;
   public static final int OR = 70;
   public static final int IDENT = 73;
   public static final int error = 1;
-  public static final int CONTINUE = 32;
-  public static final int IF = 42;
+  public static final int CONTINUE = 33;
+  public static final int IF = 43;
   public static final int UNSIGNED = 61;
-  public static final int COLON = 13;
+  public static final int COLON = 14;
   public static final int TEMPLATE = 55;
   public static final int VOLATILE = 64;
-  public static final int CASE = 29;
-  public static final int NEW = 45;
+  public static final int CASE = 30;
+  public static final int NEW = 46;
   public static final int STRING = 75;
   public static final int AND = 69;
-  public static final int PRIVATE = 11;
-  public static final int STATIC = 52;
+  public static final int PRIVATE = 12;
+  public static final int STATIC = 22;
   public static final int UMINUS = 5;
   public static final int TYPEDEF = 59;
-  public static final int AUTO = 27;
+  public static final int AUTO = 28;
   public static final int XOR = 68;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -91,6 +91,7 @@ public interface sym {
   "PLUS",
   "MINUS",
   "UMINUS",
+  "CHAR",
   "TIMES",
   "LPAREN",
   "RPAREN",
@@ -99,14 +100,14 @@ public interface sym {
   "PRIVATE",
   "INT",
   "COLON",
+  "EQUAL",
   "FLOAT",
   "DOUBLE",
   "STR",
   "PROTECTED",
   "CLPAREN",
   "CRPAREN",
-  "ST",
-  "CR",
+  "STATIC",
   "COMMA",
   "NAMESPACE",
   "DEFINE",
@@ -137,7 +138,6 @@ public interface sym {
   "SHORT",
   "SIGNED",
   "SIZEOF",
-  "STATIC",
   "STRUCT",
   "SWITCH",
   "TEMPLATE",

@@ -6,5 +6,7 @@ class abc
 		char d;
 		float ab;
 		
+		mutable aaa;
+		
 	private: aaaa
 }

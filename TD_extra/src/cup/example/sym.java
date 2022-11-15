@@ -8,62 +8,106 @@ package cup.example;
 /** CUP generated interface containing symbol constants. */
 public interface sym {
   /* terminals */
+  public static final int ESC = 113;
   public static final int SHORT = 50;
   public static final int SIGNED = 51;
+  public static final int REINTERPRETCAST = 111;
+  public static final int TYPEID = 106;
   public static final int TIMES = 7;
+  public static final int ARROW = 85;
   public static final int CONST = 32;
   public static final int ASM = 27;
+  public static final int ASS_AND = 93;
+  public static final int EXPORT = 122;
+  public static final int GE = 79;
   public static final int SEMI = 2;
+  public static final int ASS_XOR = 92;
   public static final int RIGHTSHIFT = 67;
   public static final int REGISTER = 48;
+  public static final int STATICCAST = 110;
   public static final int NAMESPACE = 24;
   public static final int ENUM = 38;
   public static final int SIZEOF = 52;
+  public static final int EXPLICIT = 119;
   public static final int CATCH = 31;
   public static final int COMMA = 23;
   public static final int VIRTUAL = 62;
   public static final int DEFINE = 25;
   public static final int THROW = 57;
+  public static final int ARROW_STAR = 84;
   public static final int RPAREN = 9;
   public static final int SMALLERTHAN = 71;
+  public static final int CONSTCAST = 112;
   public static final int DOUBLE = 17;
   public static final int STRUCT = 53;
   public static final int LPAREN = 8;
   public static final int FRIEND = 41;
+  public static final int SCOPE = 74;
   public static final int PROTECTED = 19;
+  public static final int FALSE = 100;
+  public static final int LE = 78;
+  public static final int DEC = 83;
   public static final int INLINE = 44;
   public static final int FLOAT = 16;
   public static final int CRPAREN = 21;
   public static final int GOTO = 42;
   public static final int STR = 18;
+  public static final int EQ = 76;
   public static final int GREATERTHAN = 72;
   public static final int CLPAREN = 20;
+  public static final int DOT_START = 86;
+  public static final int CHARACTER = 97;
+  public static final int HASHT = 117;
+  public static final int ASS_SUB = 88;
   public static final int CLASS = 10;
   public static final int INCLUDE = 26;
-  public static final int NUMBER = 74;
+  public static final int ASS_SHR = 95;
+  public static final int NUMBER = 123;
+  public static final int QM = 116;
+  public static final int ASS_SHL = 96;
+  public static final int DOT_STAR = 108;
+  public static final int TRUE = 101;
   public static final int LONG = 45;
   public static final int PLUS = 3;
+  public static final int DIVIDE = 115;
+  public static final int PERCENT = 114;
+  public static final int PPNUMBER = 124;
   public static final int WHILE = 65;
   public static final int UNION = 60;
   public static final int EQUAL = 15;
+  public static final int ASS_OR = 94;
   public static final int DELETE = 35;
   public static final int CHAR = 6;
+  public static final int BOOLEAN = 120;
+  public static final int ASS_MUL = 89;
   public static final int SWITCH = 54;
+  public static final int ASS_MOD = 91;
   public static final int DO = 36;
   public static final int LEFTSHIFT = 66;
   public static final int FOR = 40;
+  public static final int LOG_OR = 81;
   public static final int VOID = 63;
   public static final int EXTERN = 39;
   public static final int PUBLIC = 11;
   public static final int RETURN = 49;
+  public static final int SQRPAREN = 103;
   public static final int ELSE = 37;
   public static final int TRY = 58;
   public static final int BREAK = 29;
+  public static final int DOT = 105;
   public static final int INT = 13;
+  public static final int SQLPAREN = 102;
   public static final int EOF = 0;
   public static final int THIS = 56;
   public static final int DEFAULT = 34;
+  public static final int ESCAPED = 99;
+  public static final int MUTABLE = 118;
+  public static final int SQUIGLY = 104;
+  public static final int DYNAMICCAST = 109;
   public static final int OPERATOR = 47;
+  public static final int INC = 82;
+  public static final int ASS_DIV = 90;
+  public static final int ASS_ADD = 87;
   public static final int MINUS = 4;
   public static final int OR = 70;
   public static final int IDENT = 73;
@@ -71,16 +115,22 @@ public interface sym {
   public static final int CONTINUE = 33;
   public static final int IF = 43;
   public static final int UNSIGNED = 61;
+  public static final int LOG_AND = 80;
   public static final int COLON = 14;
   public static final int TEMPLATE = 55;
+  public static final int USING = 121;
   public static final int VOLATILE = 64;
   public static final int CASE = 30;
   public static final int NEW = 46;
-  public static final int STRING = 75;
+  public static final int TYPENAME = 107;
+  public static final int STRING = 125;
   public static final int AND = 69;
+  public static final int STRNG = 98;
   public static final int PRIVATE = 12;
+  public static final int ELLIPSIS = 75;
   public static final int STATIC = 22;
   public static final int UMINUS = 5;
+  public static final int NE = 77;
   public static final int TYPEDEF = 59;
   public static final int AUTO = 28;
   public static final int XOR = 68;
@@ -159,7 +209,57 @@ public interface sym {
   "SMALLERTHAN",
   "GREATERTHAN",
   "IDENT",
+  "SCOPE",
+  "ELLIPSIS",
+  "EQ",
+  "NE",
+  "LE",
+  "GE",
+  "LOG_AND",
+  "LOG_OR",
+  "INC",
+  "DEC",
+  "ARROW_STAR",
+  "ARROW",
+  "DOT_START",
+  "ASS_ADD",
+  "ASS_SUB",
+  "ASS_MUL",
+  "ASS_DIV",
+  "ASS_MOD",
+  "ASS_XOR",
+  "ASS_AND",
+  "ASS_OR",
+  "ASS_SHR",
+  "ASS_SHL",
+  "CHARACTER",
+  "STRNG",
+  "ESCAPED",
+  "FALSE",
+  "TRUE",
+  "SQLPAREN",
+  "SQRPAREN",
+  "SQUIGLY",
+  "DOT",
+  "TYPEID",
+  "TYPENAME",
+  "DOT_STAR",
+  "DYNAMICCAST",
+  "STATICCAST",
+  "REINTERPRETCAST",
+  "CONSTCAST",
+  "ESC",
+  "PERCENT",
+  "DIVIDE",
+  "QM",
+  "HASHT",
+  "MUTABLE",
+  "EXPLICIT",
+  "BOOLEAN",
+  "USING",
+  "EXPORT",
   "NUMBER",
+  "PPNUMBER",
   "STRING"
   };
 }

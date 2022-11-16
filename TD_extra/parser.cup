@@ -81,17 +81,18 @@ conversion_type_id, ctor_initializer, mem_initializer_list, mem_initializer_list
 template_parameter_clause, template_parameter_list, template_parameter, simple_type_parameter, templated_type_parameter, template_id, template_argument_list, template_argument, explicit_specialization,
 try_block, handler_seq, handler, exception_declaration, throw_expression, templated_throw_expression, exception_specification, type_id_list, advance_search, bang, mark, nest, start_search, start_search1, util,
 new_initializer_opt, ptr_operator_seq_opt, expression_list_opt, expression_opt, statement_seq_opt, condition_opt, declaration_seq_opt, cv_qualifier_seq_opt, abstract_declarator_opt, direct_abstract_declarator_opt,
-suffix_built_in_decl_specifier_raw, suffix_named_decl_specifier_bi, suffix_named_decl_specifiers_sf, ctor_initializer_opt, member_specification_opt;
+suffix_built_in_decl_specifier_raw, suffix_named_decl_specifier_bi, suffix_named_decl_specifiers_sf, ctor_initializer_opt, member_specification_opt, expr, expr_list, exprString;
 
 /* Precedences */
 precedence left PLUS, MINUS;
 precedence left TIMES;
 precedence left UMINUS;
 
-/* The grammar rules *//*
+/* The grammar rules */
+/*
 expr_list ::= expr_list expr:e SEMI         {::=System.out.println(e); :}
             | expr:e SEMI                   {::=System.out.println(e); :}
-            | exprString::=e                    {::=System.out.println(e); :}
+            | exprString:e                    {::=System.out.println(e); :}
             | expr_list exprString:e           {::=System.out.println(e); :}
             | expr_list:e SEMI              {::=System.out.println(e); :}
             | expr_list:e COMMA             {::=System.out.println(e); :}
@@ -121,21 +122,23 @@ exprString ::=   CLASS IDENT:e             {::=RESULT = e; :}
 			| FLOAT IDENT:e SEMI           {::=RESULT = "non-static float variable " + e; :}
 			| LONG IDENT:e SEMI            {::=RESULT = "non-static long variable " + e; :} 
 			;
-			*/
 			
+			*/
+
+    
 identifier::=                       IDENT;
-id::=                               identifier template_test PLUS template_argument_list GREATERTHAN
-    |                               identifier template_test MINUS
+id::=                               identifier SMALLERTHAN PLUS template_argument_list GREATERTHAN
+    |                               identifier SMALLERTHAN MINUS
     |                               template_id;
+
 
 global_scope::=                     SCOPE
     |                               TEMPLATE global_scope;
 id_scope::=                         id SCOPE;
-/*
- *  A :::=B :::=C; is ambiguous How much is type and how much name ?
- *  The %prec maximises the (type) length which is the 7.1-2 semantic constraint.
- */
-nested_id::=                        id_scope nested_id;
+
+nested_id::=                        id 
+    |							    id_scope nested_id;
+
 scoped_id::=                        nested_id
     |                               global_scope nested_id;
 
@@ -374,9 +377,7 @@ compound_statement::=               CLPAREN statement_seq_opt CRPAREN
 statement_seq_opt::=                 /* empty */
     |                               statement_seq_opt looping_statement
     |                               statement_seq_opt looping_statement HASHT bang error SEMI;      /*{ UNBANG("Bad statement."); }*/
-/*
- *  The dangling else conflict is resolved to the innermost if.
- */
+
 selection_statement::=              IF LPAREN condition RPAREN looping_statement   
     |                               IF LPAREN condition RPAREN looping_statement ELSE looping_statement
     |                               SWITCH LPAREN condition RPAREN looping_statement;
@@ -503,6 +504,7 @@ elaborated_type_specifier::=        elaborated_class_specifier
     |                               TYPENAME scoped_id;
 
 elaborated_enum_specifier::=        ENUM scoped_id;
+
 enum_specifier::=                   ENUM scoped_id enumerator_clause
     |                               ENUM enumerator_clause;
     
@@ -665,6 +667,8 @@ looped_initializer_clause::=        initializer_clause
 
 colon_mark::=                       COLON;                                                         /*{ mark(); };*/
 
+class_key::=                        CLASS | STRUCT | UNION;
+
 elaborated_class_specifier::=       class_key scoped_id                    
     |                               class_key scoped_id colon_mark error;                        /*{ rewind_colon(); }*/
     
@@ -672,7 +676,6 @@ class_specifier_head::=             class_key scoped_id colon_mark base_specifie
     |                               class_key COLON base_specifier_list CLPAREN
     |                               class_key scoped_id CLPAREN
     |                               class_key CLPAREN; 
-class_key::=                        CLASS | STRUCT | UNION;
 
 class_specifier::=                  class_specifier_head member_specification_opt CRPAREN
     |                               class_specifier_head member_specification_opt util looping_member_declaration HASHT bang error CRPAREN;

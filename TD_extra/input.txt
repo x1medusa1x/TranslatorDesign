@@ -1,12 +1,24 @@
-class abc
+class aaaa
 {
-	public: 
-		int a = "aaaaaa";
-		int b;
-		char d;
-		float ab;
-		
-		mutable aaa;
-		
-	private: aaaa
+
+	char a = 'a';
+	int i = 0;
+	int help(){}
+	namespace adc
+	{
+		char d = 'd';
+	}
+	
+	inline namespace A::inline B {
+		namespace dce{
+			int aia(char a, bool e = false, int d = 10){}
+		}
+		using namespace abc;
+		int a = 10;
+		class bbbb{
+			void iii(){
+				int d;
+			}		
+		}
+	}
 }

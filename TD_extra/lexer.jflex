@@ -72,8 +72,7 @@ Escape_sequence				=	({Simple_escape_sequence}|{Octal_escape_sequence}|{Hexadeci
 Universal_character_name	=	(\\u{HexInt}{HexInt}{HexInt}{HexInt}|\\U{HexInt}{HexInt}{HexInt}{HexInt}{HexInt}{HexInt}{HexInt}{HexInt})
 Non_digit					=	({Letter}|{Universal_character_name})
 
-Character_lit				=	(L?\'([^\'\\\n]|\\.)*)
-Character_literal			=	({Character_lit}\')
+Character_lit				=	\'.\'
 
 String_lit					=	(L?\"([^\"\\\n]|\\.)*)
 String_literal				=	({String_lit}\")
@@ -150,7 +149,7 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "union"      { return symbolFactory.newSymbol("UNION", UNION); }
   "unsigned"   { return symbolFactory.newSymbol("UNSIGNED", UNSIGNED); }
   "virtual"    { return symbolFactory.newSymbol("VIRTUAL", VIRTUAL); }
-  "void"       { return symbolFactory.newSymbol("VOID", VOID); }
+  "void"       { return symbolFactory.newSymbol("VOID", VOID, yytext()); }
   "volatile"   { return symbolFactory.newSymbol("VOLATILE", VOLATILE); }
   "while"      { return symbolFactory.newSymbol("WHILE", WHILE); }
   "false"      { return symbolFactory.newSymbol("FALSE", FALSE); }
@@ -169,11 +168,10 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   
    /* MISC */
   {Number}                      { return symbolFactory.newSymbol("NUMBER", NUMBER, Integer.parseInt(yytext())); }
-  {String}                      { return symbolFactory.newSymbol("STRING", STRING); }
+  {String}                      { return symbolFactory.newSymbol("STRNG", STRNG, yytext()); }
   {Whitespace}                  {                              }
-  {ident}                       { return symbolFactory.newSymbol("IDENT", IDENT); }
+  {ident}                       { return symbolFactory.newSymbol("IDENT", IDENT, yytext()); }
   {Character_lit}				{ return symbolFactory.newSymbol("CHARACTER", CHARACTER, yytext()); } 
-  {String_lit}					{ return symbolFactory.newSymbol("STRNG", STRNG, yytext());  }
   {PP_number}					{ return symbolFactory.newSymbol("PPNUMBER", PPNUMBER, Integer.parseInt(yytext())); }
   {Escape_sequence}				|
   {Universal_character_name}	{ return symbolFactory.newSymbol("ESCAPED", ESCAPED); }

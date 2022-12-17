@@ -46,7 +46,7 @@ class aaaa {
 	
 	inline namespace A::inline B::D {
 		namespace dce{
-			int aia(char a, int d = 10){}
+			int aia(char a = 'a', int d = 10){}
 		}
 		
 		int a = 10;

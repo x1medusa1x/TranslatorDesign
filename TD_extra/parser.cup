@@ -21,17 +21,18 @@ parser code {:
 		return syntaxTree;
   	}
   	protected MultiTreeNode createDeclarationNode(MultiTreeNode declaration) { throw new UnsupportedOperationException();}
- 	protected MultiTreeNode createFunctionDeclarationNode(MultiTreeNode typeSpecifier, String identifierName, MultiTreeNode paramsList, MultiTreeNode compoundStatement) { throw new UnsupportedOperationException(); }
-	protected MultiTreeNode createObjDeclarationNode(MultiTreeNode typeSpecifier, String identifierName, MultiTreeNode compoundStatement) { throw new UnsupportedOperationException(); }
+ 	protected MultiTreeNode createFunctionDeclarationNode(String typeSpecifier, String identifierName, MultiTreeNode paramsList, MultiTreeNode compoundStatement) { throw new UnsupportedOperationException(); }
+	protected MultiTreeNode createObjDeclarationNode(String typeSpecifier, String identifierName, MultiTreeNode compoundStatement) { throw new UnsupportedOperationException(); }
   	protected MultiTreeNode createNamespaceDeclarationNode(MultiTreeNode typeSpecifier, String identifierList, MultiTreeNode scopeList, MultiTreeNode compoundStatement) { throw new UnsupportedOperationException(); }
 	protected MultiTreeNode createInstanceDeclarationNode(String typeSpecifier, String identifierName, String paramsList, String value) { throw new UnsupportedOperationException(); }
 	protected MultiTreeNode createAccessSpecifiersDeclarationNode(MultiTreeNode typeSpecifier, MultiTreeNode compoundStatement) { throw new UnsupportedOperationException(); }
 	protected MultiTreeNode createTypeSpecifier(String typeName){ throw new UnsupportedOperationException();  } 
 	protected MultiTreeNode createListNode(String listName, MultiTreeNode firstChild){throw new UnsupportedOperationException();  }
 	protected MultiTreeNode createListNode(String listName, String firstChild){throw new UnsupportedOperationException();  }
-	protected MultiTreeNode createVarDeclaration(MultiTreeNode typeSpecifier, String identifierName, Integer value ){throw new UnsupportedOperationException();  }
-	protected MultiTreeNode createVarDeclaration(MultiTreeNode typeSpecifier, String identifierName, char value ){throw new UnsupportedOperationException();  }
-	protected MultiTreeNode createVarDeclaration(MultiTreeNode typeSpecifier, String identifierName, String value ){throw new UnsupportedOperationException();  }
+	protected MultiTreeNode createVarDeclaration(String typeSpecifier, String identifierName, Integer value ){throw new UnsupportedOperationException();  }
+	protected MultiTreeNode createVarDeclaration(String typeSpecifier, String identifierName, char value ){throw new UnsupportedOperationException();  }
+	protected MultiTreeNode createVarDeclaration(String typeSpecifier, String identifierName, String value ){throw new UnsupportedOperationException();  }
+	protected MultiTreeNode createVarDeclaration(String typeSpecifier, String identifierName){throw new UnsupportedOperationException();  }
 	protected MultiTreeNode createCompoundStatement(MultiTreeNode declarations, MultiTreeNode instructions){throw new UnsupportedOperationException();  }
 	protected MultiTreeNode createIfStatement(String IDENT, MultiTreeNode ifInstructions, MultiTreeNode elseInstructions){throw new UnsupportedOperationException();  }
 	protected MultiTreeNode createCallFunction(String IDENT, String parameters){throw new UnsupportedOperationException();  }
@@ -81,12 +82,12 @@ terminal Integer    NUMBER, PPNUMBER;        // our scanner provides numbers as 
 terminal String     IDENT, STRING;       // our scanner provides numbers as integers
 
 /* Non terminals */
-non terminal MultiTreeNode expr, access_expr, expr_list, classes, types,  string, literal, boolean_literal, initial, data_declaration, char, boolean, functions,
+non terminal MultiTreeNode expr, access_expr, expr_list, classes, types, boolean_literal, initial, data_declaration, functions,
 params, namespaces, inline_namespaces, operations, access_specifiers, function_declaration, params_list, compound_statement, local_declaration_list,
-call_function, instructions_list, return_statements, program_unit, void_literal, object_declaration, class_compound_statement, specifiers, list_expr, list_access, 
+call_function, instructions_list, return_statements, program_unit, object_declaration, class_compound_statement, list_expr, list_access, 
 namespace_declarations, inline_types, inline_types_list, instances, value_literal, access_declarations, definition, list;
 
-non terminal String identifier_list, exprString;
+non terminal String identifier_list, literal, char, string, boolean, void_literal, specifiers;
 
 /* Precedences */
 precedence left PLUS, MINUS;
@@ -122,7 +123,6 @@ expr::=								types: type {: RESULT = createDeclarationNode(type); :}
 	;
 	
 access_expr::=						types: type {: RESULT = createDeclarationNode(type); :}	
-	|								object_declaration: cdef {: RESULT = createDeclarationNode(cdef); :}	
 	|								function_declaration: fdef {: RESULT = createDeclarationNode(fdef); :}
 	;
 	
@@ -132,8 +132,8 @@ instances::= 						IDENT:id1 IDENT:id2 EQUAL NEW IDENT:id3 SEMI {: RESULT = crea
 	|								IDENT:id1 IDENT:id2 LPAREN identifier_list:il RPAREN SEMI {: RESULT = createInstanceDeclarationNode(id1, id2, null, il); :}
 	;
 	
-specifiers::=						CLASS:ts {: RESULT = createTypeSpecifier("CLASS"); :}
-	|								STRUCT:ts {: RESULT = createTypeSpecifier("STRUCT"); :}
+specifiers::=						CLASS:ts {: RESULT = "CLASS"; :}
+	|								STRUCT:ts {: RESULT = "STRUCT"; :}
 	;
 	
 access_declarations::=				access_specifiers:id COLON list_access:cs {: RESULT = createAccessSpecifiersDeclarationNode(id, cs); :}
@@ -195,88 +195,45 @@ compound_statement::=				CLPAREN CRPAREN {: RESULT = createCompoundStatement(nul
 	|								CLPAREN instructions_list: il CRPAREN {: RESULT = createCompoundStatement(null, il); :}
 	;
 
-params::= 							params_list: fp {: RESULT = createListNode("ParametersList", fp); :}
+params::= 							{: RESULT = null; :}
+	|								params_list: fp {: RESULT = createListNode("ParametersList", fp); :}
 	|								params:pl COMMA params_list:fp {: RESULT = pl; RESULT.addChild(fp); :} 
 	;
 	
-params_list::= 	                    {: RESULT = null; :}
-	|								literal:ts IDENT:id {: RESULT = createVarDeclaration(ts, id, 0); :}
-	|								string:ts IDENT:id {: RESULT = createVarDeclaration(ts, id, 0); :}
-	| 								char:ts IDENT:id {: RESULT = createVarDeclaration(ts, id, 0); :}
-	|								boolean:ts IDENT: id {: RESULT = createVarDeclaration(ts, id, 0); :}
-	|								literal:ts IDENT:id EQUAL NUMBER:cval {: RESULT = createVarDeclaration(ts, id, cval); :}
-	|								string:ts IDENT:id EQUAL STRNG:cval {: RESULT = createVarDeclaration(ts, id, "" + cval); :}
-	|								char:ts IDENT:id EQUAL CHARACTER:cval {: RESULT = createVarDeclaration(ts, id, "" + cval); :}
-	;
-	
-literal::=                          INT:e {: RESULT = createTypeSpecifier("INT"); :}
-    |                               FLOAT:e {: RESULT = createTypeSpecifier("FLOAT"); :}
-    |                               DOUBLE:e {: RESULT = createTypeSpecifier("DOUBLE");; :}
+literal::=                          INT:e {: RESULT = "INT"; :}
+    |                               FLOAT:e {: RESULT = "FLOAT"; :}
+    |                               DOUBLE:e {: RESULT = "DOUBLE"; :}
     ;
 
-void_literal::=						VOID: e {: RESULT = createTypeSpecifier("VOID"); :}
+void_literal::=						VOID: e {: RESULT = "VOID"; :}
 	;
 
-string::=                           STR:e {: RESULT = createTypeSpecifier("STRING"); :}
+string::=                           STR:e {: RESULT = "STRING"; :}
 	;
 	
-char::= 							CHAR:e {: RESULT = createTypeSpecifier("CHAR"); :}
+char::= 							CHAR:e {: RESULT = "CHAR"; :}
 	;
 
-boolean::= 							BOOLEAN:e {: RESULT = createTypeSpecifier("BOOLEAN"); :}
+boolean::= 							BOOLEAN:e {: RESULT = "BOOLEAN"; :}
 	;
 	
-types::= 							literal:ts IDENT:id SEMI {: RESULT = createVarDeclaration(ts, id, 0); :}
-	|								string:ts IDENT:id SEMI {: RESULT = createVarDeclaration(ts, id, 0); :}
-	| 								char:ts IDENT:id SEMI {: RESULT = createVarDeclaration(ts, id, 0); :}
-	|								boolean:ts IDENT:id SEMI {: RESULT = createVarDeclaration(ts, id, 0); :}
+types::= 							literal:ts IDENT:id SEMI {: RESULT = createVarDeclaration(ts, id); :}
+	|								string:ts IDENT:id SEMI {: RESULT = createVarDeclaration(ts, id); :}
+	| 								char:ts IDENT:id SEMI {: RESULT = createVarDeclaration(ts, id); :}
+	|								boolean:ts IDENT:id SEMI {: RESULT = createVarDeclaration(ts, id); :}
 	|								literal:ts IDENT:id EQUAL NUMBER:cval SEMI {: RESULT = createVarDeclaration(ts, id, cval); :}
 	|								string:ts IDENT:id EQUAL STRNG:cval SEMI {: RESULT = createVarDeclaration(ts, id, "" + cval); :}
 	|								char:ts IDENT:id EQUAL CHARACTER:cval SEMI {: RESULT = createVarDeclaration(ts, id, "" + cval); :}
 	;
-				
 
-
-operator::=            /*++++*/     NEW {::}
-    |                 /*++++*/      DELETE {::}
-    |                               PLUS {::}
-    |                               MINUS {::}
-    |                               TIMES {::}
-    |                               DIVIDE {::}
-    |                               PERCENT {::}
-    |                               XOR {::}
-    |                               AND {::}
-    |                               OR {::}
-    |                               SQUIGLY {::}
-    |                               ESC {::}
-    |                               EQUAL {::}
-    |                               SMALLERTHAN {::}
-    |                               GREATERTHAN {::}
-    |                               ASS_ADD {::}
-    |                               ASS_SUB {::}
-    |                               ASS_MUL {::}
-    |                               ASS_DIV {::}
-    |                               ASS_MOD {::}
-    |                               ASS_XOR {::}
-    |                               ASS_AND {::}
-    |                               ASS_OR {::}
-    |                               LEFTSHIFT {::}
-    |                               RIGHTSHIFT {::}
-    |                               ASS_SHR {::}
-    |                               ASS_SHL {::}
-    |                               EQ {::}
-    |                               NE {::}
-    |                               LE {::}
-    |                               GE {::}
-    |                               LOG_AND {::}
-    |                               LOG_OR {::}
-    |                               INC {::}
-    |                               DEC {::}
-    |                               COMMA {::}
-    |                               ARROW_STAR {::}
-    |                               ARROW {::}
-    |                               LPAREN RPAREN {::}
-    |                               SQLPAREN SQRPAREN {::};
+params_list::= 	                    literal:ts IDENT:id {: RESULT = createVarDeclaration(ts, id); :}
+	|								string:ts IDENT:id {: RESULT = createVarDeclaration(ts, id); :}
+	| 								char:ts IDENT:id {: RESULT = createVarDeclaration(ts, id); :}
+	|								boolean:ts IDENT: id {: RESULT = createVarDeclaration(ts, id); :}
+	|								literal:ts IDENT:id EQUAL NUMBER:cval {: RESULT = createVarDeclaration(ts, id, cval); :}
+	|								string:ts IDENT:id EQUAL STRNG:cval {: RESULT = createVarDeclaration(ts, id, "" + cval); :}
+	|								char:ts IDENT:id EQUAL CHARACTER:cval {: RESULT = createVarDeclaration(ts, id, "" + cval); :} 
+	;
 
 
 

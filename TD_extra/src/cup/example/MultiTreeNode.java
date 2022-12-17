@@ -6,6 +6,11 @@ public class MultiTreeNode {
 	
 	private String data;
 	private String extraData;
+	private String vDString;
+	private Integer vDInteger;
+	private char vDChar;
+	private Double vDDouble;
+	private Float vDFloat;
 	private ArrayList<MultiTreeNode> children;	
 	private int descendentsCount = 0; 
 	
@@ -35,6 +40,51 @@ public class MultiTreeNode {
 		children = new ArrayList<MultiTreeNode>();
 	}
 	
+	public MultiTreeNode(String data, String extraData, String vDString)
+	{
+		this.data = data;
+		this.extraData = extraData;
+		this.vDString = vDString;
+		children = new ArrayList<MultiTreeNode>();
+	}
+	
+	public MultiTreeNode(String data, String extraData, Integer vDInteger)
+	{
+		this.data = data;
+		this.extraData = extraData;
+		this.vDInteger = vDInteger;
+		children = new ArrayList<MultiTreeNode>();
+	}
+	
+	public MultiTreeNode(String data, String extraData, char vDChar)
+	{
+		this.data = data;
+		this.extraData = extraData;
+		this.vDChar = vDChar;
+		children = new ArrayList<MultiTreeNode>();
+	}
+	
+	public MultiTreeNode(String data, String extraData, Double vDDouble)
+	{
+		this.data = data;
+		this.extraData = extraData;
+		this.vDDouble = vDDouble;
+		children = new ArrayList<MultiTreeNode>();
+	}
+	
+	public MultiTreeNode(String data, String extraData, Float vDFloat)
+	{
+		this.data = data;
+		this.extraData = extraData;
+		this.vDFloat = vDFloat;
+		children = new ArrayList<MultiTreeNode>();
+	}
+	
+	public MultiTreeNode(MultiTreeNode children) {
+		this.children = new ArrayList<MultiTreeNode>();
+		this.children.add(children);
+	}
+	
 	public MultiTreeNode(String data) 
 	{
 		this(data, "");
@@ -59,11 +109,39 @@ public class MultiTreeNode {
 		{
 			System.out.print(" ");
 		}
-		System.out.print(data);
+		if(data != null){
+			System.out.print(data);
+		}
+		
 		if (extraData != null && extraData.length() > 0)
 		{
-			System.out.print(" - " + extraData + " - ");
+			System.out.print(" " + extraData);
 		}
+		
+			if(vDString != null && vDString.length() > 0) 
+			{
+				System.out.print(" = " + vDString);
+			}
+			
+			if(vDInteger != null)
+			{
+				System.out.print(" = " + vDInteger);
+			} 
+			
+			if(((int)vDChar) != 0)
+			{
+				System.out.print(" = " + vDChar);
+			} 
+			
+			if(vDDouble != null)
+			{
+				System.out.print(" = " + vDDouble);
+			} 
+			
+			if(vDFloat != null)
+			{
+				System.out.print(" = " + vDFloat);
+			}
 		System.out.println("");
 		
 		for (MultiTreeNode multiTreeNode : children) {

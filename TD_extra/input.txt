@@ -2,49 +2,49 @@ double b = 1;
 
 class aaaa {
 	int lll(int a){
-		int a;
-		lll(b);
+		int b;
+		lll(c);
 	}
-	string aaa;
-	class bbb {
-		string qweq = "qdwdq";
-		int ddd(char q = 'l'){
-			ddd(aaa);
-			int b;
+	string d;
+	class e {
+		string f = "f";
+		int ddd(char g = 'l'){
+			ddd(h);
+			int i;
 		}
 		
-		AAA d = new DDD(qweq);
+		AAA j = new k(l);
 		
-		int l;
+		int m;
 	}
 	
 	public:
-		int a;
-		struct ddd {
+		int n;
+		struct o {
 			private:
-				int d;
-				class effffff {	}
-			int aaa;
+				int p;
+				class q {	}
+			int r;
 			
-			public: int dea;
+			public: int s;
 		}
 	private: 
-		char d;
+		char t;
 	
-	struct ddd {
-		class efg {
-			struct lmao {
-				int d;
-				int ddd(char q = 'l'){
-					ddd(aaa);
+	struct u {
+		class v {
+			struct w {
+				int x;
+				int ddd(char y = 'l'){
+					ddd(z);
 				}
 			}
 		}
 	}
 	
-	l d;
+	lll aa;
 	
-	inline namespace A::inline B::D {
+	inline namespace A {
 		namespace dce{
 			int aia(char a = 'a', int d = 10){}
 		}
@@ -63,5 +63,6 @@ int abcd(int a = 12, double hg){
 	int a;
 	string aaa = "bbbaa";
 	char d = 'd';
+	float aaaa;
 	abcd(a, b, c, d);
 }

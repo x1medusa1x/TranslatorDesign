@@ -15,53 +15,77 @@ public class ParserWithTree extends Parser{
 	
  	protected MultiTreeNode createFunctionDeclarationNode(String typeSpecifier, String identifierName, MultiTreeNode paramsList, MultiTreeNode compoundStatement) 	
  	{ 
- 		MultiTreeNode newNode = new MultiTreeNode(typeSpecifier + " function", identifierName);
+ 		Integer[] type = new Integer[1];
+ 		type[0] = 0;
+ 		MultiTreeNode newNode = new MultiTreeNode(typeSpecifier, identifierName, type);
  		if (paramsList != null)
- 			newNode.addChild(paramsList);
- 		newNode.addChild(compoundStatement);
+ 			newNode.addChild(paramsList, identifierName);
+ 		newNode.addChild(compoundStatement, identifierName);
  		return newNode; 
  	}
  	protected MultiTreeNode createObjDeclarationNode(String typeSpecifier, String identifierName, MultiTreeNode compoundStatement) 	
  	{ 
- 		MultiTreeNode newNode = new MultiTreeNode(typeSpecifier, identifierName);
+ 		Integer[] type = new Integer[1];
+ 		type[0] = 4;
+ 		MultiTreeNode newNode = new MultiTreeNode(typeSpecifier, identifierName, type);
  		if(compoundStatement != null)
- 			newNode.addChild(compoundStatement);
+ 			newNode.addChild(compoundStatement, identifierName);
  		return newNode; 
  	}
- 	protected MultiTreeNode createNamespaceDeclarationNode(MultiTreeNode typeSpecifier, String identifierList, MultiTreeNode scopeList, MultiTreeNode compoundStatement) 	
+ 	protected MultiTreeNode createNamespaceDeclarationNode(String typeSpecifier, String identifierList, MultiTreeNode scopeList, MultiTreeNode compoundStatement) 	
  	{ 
- 		MultiTreeNode newNode = new MultiTreeNode("NamespaceDeclaration");
- 		newNode.addChild(typeSpecifier);
- 		newNode.addChild(new MultiTreeNode("Identifier", identifierList));
+ 		Integer[] type = new Integer[1];
+ 		type[0] = 5;
+ 		MultiTreeNode newNode = new MultiTreeNode(typeSpecifier, identifierList, type);
  		if(scopeList != null)
  			newNode.addChild(scopeList);
  		newNode.addChild(compoundStatement);
  		return newNode; 
  	}
- 	protected MultiTreeNode createAccessSpecifiersDeclarationNode(MultiTreeNode typeSpecifier, MultiTreeNode compoundStatement) 	
+ 	protected MultiTreeNode createAccessSpecifiersDeclarationNode(String typeSpecifier, MultiTreeNode compoundStatement) 	
  	{ 
- 		MultiTreeNode newNode = new MultiTreeNode("AccessSpecifierDeclaration");
- 		newNode.addChild(typeSpecifier);
+ 		Integer[] type = new Integer[1];
+ 		type[0] = 6;
+ 		MultiTreeNode newNode = new MultiTreeNode(typeSpecifier, type);
  		if(compoundStatement != null)
  			newNode.addChild(compoundStatement);
  		return newNode; 
  	}
  	protected MultiTreeNode createInstanceDeclarationNode(String typeSpecifier, String identifierName, String paramsList, String value) 	
  	{ 
- 		MultiTreeNode newNode = new MultiTreeNode("InstanceDeclaration");
- 		newNode.addChild(new MultiTreeNode("TypeSpecifier", typeSpecifier));
- 		newNode.addChild(new MultiTreeNode("VariableName", identifierName));
- 		if (paramsList != null)
- 			newNode.addChild(new MultiTreeNode("InstanceName", paramsList));
- 		if (value != null)
- 			newNode.addChild(new MultiTreeNode("ParametersList", value));
+ 		Integer[] type = new Integer[1];
+ 		type[0] = 4;
+ 		MultiTreeNode newNode = null;
+ 		if(identifierName != null && paramsList != null) {
+ 			newNode = new MultiTreeNode(typeSpecifier, identifierName, paramsList, value, type);
+ 		}else {
+ 			if(paramsList != null) {
+ 				newNode = new MultiTreeNode(typeSpecifier, identifierName, paramsList, type);
+ 			}else {
+ 				newNode = new MultiTreeNode(typeSpecifier, identifierName, type);
+ 			}
+ 		}
  		return newNode; 
  	}
   	protected MultiTreeNode createTypeSpecifier(String typeName)
   	{ 
-  		MultiTreeNode newNode = new MultiTreeNode("TypeSpecifier", typeName);
+ 		Integer[] type = new Integer[1];
+ 		type[0] = 4;
+  		MultiTreeNode newNode = new MultiTreeNode("TypeSpecifier", typeName, type);
+  		return newNode;
+  	} 	
+
+  	protected MultiTreeNode createTypeSpecifier(String typeName, String typeNameVal)
+  	{ 
+ 		Integer[] type = new Integer[1];
+ 		type[0] = 4;
+ 		if(typeNameVal == "namespace") {
+ 			type[0] = 5;
+ 		}
+  		MultiTreeNode newNode = new MultiTreeNode(typeName, type);
   		return newNode;
   	}
+
   	protected MultiTreeNode createValueLiteral(String typeName)
   	{ 
   		MultiTreeNode newNode = new MultiTreeNode("String", typeName);
@@ -98,38 +122,69 @@ public class ParserWithTree extends Parser{
 	}
 	protected MultiTreeNode createListNode(String listName, String firstChild)
 	{
-		MultiTreeNode newNode = new MultiTreeNode(listName);
+		Integer[] type = new Integer[1];
+ 		type[0] = 3;
+		MultiTreeNode newNode = new MultiTreeNode(listName, type);
+		newNode.addChild(new MultiTreeNode("", "" + firstChild), listName);
+		return newNode;
+	}
+
+	protected MultiTreeNode createListNode(MultiTreeNode firstChild)
+	{
+		MultiTreeNode newNode = new MultiTreeNode("");
+		if(firstChild != null) {
+			newNode.addChild(firstChild);
+		}
+		return newNode;
+	}
+	protected MultiTreeNode createListNode(String firstChild)
+	{
+		Integer[] type = new Integer[1];
+ 		type[0] = 3;
+		MultiTreeNode newNode = new MultiTreeNode("", type);
 		newNode.addChild(new MultiTreeNode("", "" + firstChild));
 		return newNode;
 	}
 	protected MultiTreeNode createVarDeclaration(String typeSpecifier, String identifierName, Integer value )
 	{
-		MultiTreeNode newNode = new MultiTreeNode(typeSpecifier, identifierName, value);
+		Integer[] type = new Integer[1];
+ 		type[0] = 1;
+		MultiTreeNode newNode = new MultiTreeNode(typeSpecifier, identifierName, value, type);
 		return newNode;
 	}
 	protected MultiTreeNode createVarDeclaration(String typeSpecifier, String identifierName, Float value )
 	{
-		MultiTreeNode newNode = new MultiTreeNode(typeSpecifier, identifierName, value);
+		Integer[] type = new Integer[1];
+ 		type[0] = 1;
+		MultiTreeNode newNode = new MultiTreeNode(typeSpecifier, identifierName, value, type);
 		return newNode;
 	}
 	protected MultiTreeNode createVarDeclaration(String typeSpecifier, String identifierName, Double value )
 	{
-		MultiTreeNode newNode = new MultiTreeNode(typeSpecifier, identifierName, value);
+		Integer[] type = new Integer[1];
+ 		type[0] = 1;
+		MultiTreeNode newNode = new MultiTreeNode(typeSpecifier, identifierName, value, type);
 		return newNode;
 	}
 	protected MultiTreeNode createVarDeclaration(String typeSpecifier, String identifierName, String value )
 	{
-		MultiTreeNode newNode = new MultiTreeNode(typeSpecifier, identifierName, value);
+		Integer[] type = new Integer[1];
+ 		type[0] = 1;
+		MultiTreeNode newNode = new MultiTreeNode(typeSpecifier, identifierName, value, type);
 		return newNode;
 	}
 	protected MultiTreeNode createVarDeclaration(String typeSpecifier, String identifierName)
 	{
-		MultiTreeNode newNode = new MultiTreeNode(typeSpecifier, identifierName);
+		Integer[] type = new Integer[1];
+ 		type[0] = 1;
+		MultiTreeNode newNode = new MultiTreeNode(typeSpecifier, identifierName, type);
 		return newNode;
 	}
 	protected MultiTreeNode createVarDeclaration(String typeSpecifier, String identifierName, char value )
 	{
-		MultiTreeNode newNode = new MultiTreeNode("Var Declaration", identifierName);
+		Integer[] type = new Integer[1];
+ 		type[0] = 1;
+		MultiTreeNode newNode = new MultiTreeNode(typeSpecifier, identifierName, value, type);
 		if(typeSpecifier != null) {
 			newNode.addChild(typeSpecifier);		
 			newNode.addChild(new MultiTreeNode("CharValue", "" + value));
@@ -155,9 +210,12 @@ public class ParserWithTree extends Parser{
 	}
 	protected MultiTreeNode createCallFunction(String identifier, String parameters)
 	{
-		MultiTreeNode newNode = new MultiTreeNode("FunctionCall", identifier);
+		String entry = "";
+		Integer[] type = new Integer[1];
+		type[0] = 0;
 		if(parameters != null)
-			newNode.addChild(new MultiTreeNode("Parameters", parameters));
+			entry = parameters;
+		MultiTreeNode newNode = new MultiTreeNode(identifier, entry, type);
 		return newNode;
 	}
 }

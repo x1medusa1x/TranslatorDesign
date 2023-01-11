@@ -23,12 +23,15 @@ parser code {:
   	protected MultiTreeNode createDeclarationNode(MultiTreeNode declaration) { throw new UnsupportedOperationException();}
  	protected MultiTreeNode createFunctionDeclarationNode(String typeSpecifier, String identifierName, MultiTreeNode paramsList, MultiTreeNode compoundStatement) { throw new UnsupportedOperationException(); }
 	protected MultiTreeNode createObjDeclarationNode(String typeSpecifier, String identifierName, MultiTreeNode compoundStatement) { throw new UnsupportedOperationException(); }
-  	protected MultiTreeNode createNamespaceDeclarationNode(MultiTreeNode typeSpecifier, String identifierList, MultiTreeNode scopeList, MultiTreeNode compoundStatement) { throw new UnsupportedOperationException(); }
+  	protected MultiTreeNode createNamespaceDeclarationNode(String typeSpecifier, String identifierList, MultiTreeNode scopeList, MultiTreeNode compoundStatement) { throw new UnsupportedOperationException(); }
 	protected MultiTreeNode createInstanceDeclarationNode(String typeSpecifier, String identifierName, String paramsList, String value) { throw new UnsupportedOperationException(); }
-	protected MultiTreeNode createAccessSpecifiersDeclarationNode(MultiTreeNode typeSpecifier, MultiTreeNode compoundStatement) { throw new UnsupportedOperationException(); }
+	protected MultiTreeNode createAccessSpecifiersDeclarationNode(String typeSpecifier, MultiTreeNode compoundStatement) { throw new UnsupportedOperationException(); }
 	protected MultiTreeNode createTypeSpecifier(String typeName){ throw new UnsupportedOperationException();  } 
+	protected MultiTreeNode createTypeSpecifier(String typeName, String typeNameVal){ throw new UnsupportedOperationException();  } 
 	protected MultiTreeNode createListNode(String listName, MultiTreeNode firstChild){throw new UnsupportedOperationException();  }
 	protected MultiTreeNode createListNode(String listName, String firstChild){throw new UnsupportedOperationException();  }
+	protected MultiTreeNode createListNode(String firstChild){throw new UnsupportedOperationException();  }
+	protected MultiTreeNode createListNode(MultiTreeNode firstChild){throw new UnsupportedOperationException();  }
 	protected MultiTreeNode createVarDeclaration(String typeSpecifier, String identifierName, Integer value ){throw new UnsupportedOperationException();  }
 	protected MultiTreeNode createVarDeclaration(String typeSpecifier, String identifierName, char value ){throw new UnsupportedOperationException();  }
 	protected MultiTreeNode createVarDeclaration(String typeSpecifier, String identifierName, String value ){throw new UnsupportedOperationException();  }
@@ -39,7 +42,7 @@ parser code {:
 	protected MultiTreeNode createValueLiteral(String typeName) {throw new UnsupportedOperationException();  }
   	protected MultiTreeNode createValueLiteral(Integer typeName) {throw new UnsupportedOperationException();  }
   	protected MultiTreeNode createValueLiteral(double typeName) {throw new UnsupportedOperationException();  }
-  	protected MultiTreeNode createValueLiteral(float typeName) {throw new UnsupportedOperationException();  }
+  	protected MultiTreeNode createValueLiteral(float typeName) {throw new UnsupportedOperationException();  } 
   	protected MultiTreeNode createValueLiteral(char typeName) {throw new UnsupportedOperationException();  }
 :}
 
@@ -83,11 +86,11 @@ terminal String     IDENT, STRING;       // our scanner provides numbers as inte
 
 /* Non terminals */
 non terminal MultiTreeNode expr, access_expr, expr_list, classes, types, boolean_literal, initial, data_declaration, functions,
-params, namespaces, inline_namespaces, operations, access_specifiers, function_declaration, params_list, compound_statement, local_declaration_list,
+params, namespaces, inline_namespaces, operations, function_declaration, params_list, compound_statement, local_declaration_list,
 call_function, instructions_list, return_statements, program_unit, object_declaration, class_compound_statement, list_expr, list_access, 
-namespace_declarations, inline_types, inline_types_list, instances, value_literal, access_declarations, definition, list;
+inline_types, inline_types_list, instances, value_literal, access_declarations, definition, list;
 
-non terminal String identifier_list, literal, char, string, boolean, void_literal, specifiers;
+non terminal String identifier_list, literal, char, string, boolean, void_literal, access_specifiers, namespace_declarations, specifiers;
 
 /* Precedences */
 precedence left PLUS, MINUS;
@@ -139,13 +142,13 @@ specifiers::=						CLASS:ts {: RESULT = "CLASS"; :}
 access_declarations::=				access_specifiers:id COLON list_access:cs {: RESULT = createAccessSpecifiersDeclarationNode(id, cs); :}
 	;
 	
-access_specifiers::=				PUBLIC {: RESULT = createTypeSpecifier("PUBLIC"); :}
-	|								PRIVATE {: RESULT = createTypeSpecifier("PRIVATE"); :}
-	|								PROTECTED {: RESULT = createTypeSpecifier("PROTECTED"); :}
+access_specifiers::=				PUBLIC {: RESULT = "PUBLIC"; :}
+	|								PRIVATE {: RESULT = "PRIVATE"; :}
+	|								PROTECTED {: RESULT = "PROTECTED"; :}
 	;
 	
-namespace_declarations::=			NAMESPACE:ts {: RESULT = createTypeSpecifier("NAMESPACE"); :}
-	|								INLINE NAMESPACE:ts {: RESULT = createTypeSpecifier("INLINE NAMESPACE"); :}
+namespace_declarations::=			NAMESPACE:ts {: RESULT = "NAMESPACE"; :}
+	|								INLINE NAMESPACE:ts {: RESULT = "INLINE NAMESPACE"; :}
 	;
 	
 namespaces::=						namespace_declarations:nd IDENT:id SCOPE inline_namespaces:in CLPAREN list_expr:cs CRPAREN {: RESULT = createNamespaceDeclarationNode(nd, id, in, cs); :}
@@ -196,7 +199,7 @@ compound_statement::=				CLPAREN CRPAREN {: RESULT = createCompoundStatement(nul
 	;
 
 params::= 							{: RESULT = null; :}
-	|								params_list: fp {: RESULT = createListNode("ParametersList", fp); :}
+	|								params_list: fp {: RESULT = createListNode(fp); :}
 	|								params:pl COMMA params_list:fp {: RESULT = pl; RESULT.addChild(fp); :} 
 	;
 	
@@ -206,7 +209,7 @@ literal::=                          INT:e {: RESULT = "INT"; :}
     ;
 
 void_literal::=						VOID: e {: RESULT = "VOID"; :}
-	;
+	; 
 
 string::=                           STR:e {: RESULT = "STRING"; :}
 	;

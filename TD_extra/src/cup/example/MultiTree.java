@@ -1,5 +1,8 @@
 package cup.example;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class MultiTree {
 	
 	private MultiTreeNode root = null;
@@ -52,6 +55,20 @@ public class MultiTree {
 		root.printNode(0);
 		System.out.println("Total elements: " + nodesCount);
 				
+	}
+	
+	public MultiTreeNode getRoot() {
+		return root;
+	}
+	
+	public void getHashMap(HashMap<String, ArrayList<SymTableEntry>> hashMap){
+		if (root == null)
+		{
+			System.out.println("The tree was not created yet.");
+			return;
+		}
+		
+		root.addToHashMap(0, hashMap);
 	}
 
 	public int getNodesCount() {
